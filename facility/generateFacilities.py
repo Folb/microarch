@@ -49,6 +49,8 @@ gen_size = int(sys.argv[1])
 folder = os.path.abspath("facilities")
 for the_file in os.listdir(folder):
     file_path = os.path.join(folder, the_file)
+    if "init.txt" in file_path:
+        continue
     try:
         if os.path.isfile(file_path):
             os.unlink(file_path)
