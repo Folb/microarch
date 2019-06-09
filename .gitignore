@@ -13,6 +13,7 @@
 .idea/**/dictionaries
 .idea/**/shelf
 facility/facilities/*.json
+requirements
 
 # Generated files
 .idea/**/contentModel.xml

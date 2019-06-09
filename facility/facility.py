@@ -8,7 +8,7 @@ import time
 
 def run_simulation(facility):
     while True:
-        sleep(5)
+        time.sleep(5)
 
 def parse_infile(infile):
     json_facility = None
