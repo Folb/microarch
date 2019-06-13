@@ -2,6 +2,9 @@ class Facility():
     def __init__(self):
         pass
 
+    def set_id(self, i):
+        self.id = i
+
     def set_name(self, name):
         self.name = name
 
@@ -22,6 +25,9 @@ class Facility():
 
     def set_actuators(self, actuators):
         self.actuators = actuators
+
+    def set_simulation(self, simulation):
+        self.simulation = simulation
 
 class Actuator():
     def __init__(self):
@@ -54,5 +60,13 @@ class Sensor():
 
     def set_network_status(self, s):
         self.network_status = s
+
+class Command():
+    def __init__(self, node_type, node_id):
+        self.node_type = node_type
+        self.node_id = node_id
+
+    def set_new_value(self, val):
+        self.new_value = val
 
 

@@ -29,7 +29,11 @@ while true; do
     if [ "$USER_INPUT" = "$GENERATE" ]; then
         echo "How many facilities do you want?"
         read FAC_NMB
-        python3 generateFacilities.py $FAC_NMB    
+        echo "How many cycles do you want?"
+        read CYCLE_NMB
+        echo "How many messages do you want per cycle?"
+        read UPDATE_NMB
+        python3 generateFacilities.py $FAC_NMB $CYCLE_NMB $UPDATE_NMB   
     fi
     if [ "$USER_INPUT" = "$LIST_FACILITIES" ]; then
         for filename in facilities/*.json; do

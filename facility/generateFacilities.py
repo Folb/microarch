@@ -4,7 +4,7 @@ import json
 import os, shutil
 import math
 
-from objects import Facility, Actuator, Sensor
+from objects import *
 
 base_names = [
         'Knappe',
@@ -92,6 +92,7 @@ for i in range(0, gen_size):
         a_id += 1
 
     fac = Facility()
+    fac.set_id(i + 1)
     fac.set_name(name)
     fac.set_type(t)
     fac.set_location(location)
@@ -99,6 +100,22 @@ for i in range(0, gen_size):
     fac.set_open(True)
     fac.set_sensors(sensors)
     fac.set_actuators(actuators)
+
+    simulation = []
+    cycles = int(sys.argv[2])
+    messages_per_cycle = int(sys.argv[3])
+    for j in range(0, cycles):
+        for k in range(0, messages_per_cycle):
+            node_type = "sensor"
+            node_id = int(random.randrange(0, len(sensors)))
+            com = Command(node_type, sensors[node_id].id)
+            com.set_new_value(sensors[node_id].value + random.randrange(-3, 4))
+            sensors[node_id].value = com.new_value
+            simulation.append(com)
+           
+        simulation.append("|")
+    
+    fac.set_simulation(simulation)
 
     with open('facilities/' + name + '.json', 'w') as outfile:
         json.dump(fac, outfile, default=lambda o: o.__dict__)
