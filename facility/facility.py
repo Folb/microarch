@@ -5,6 +5,7 @@ import os
 from objects import Facility, Actuator, Sensor
 from parser import Parser
 import time
+import datetime
 from kafka import KafkaProducer
 
 #Kafka stuff
@@ -16,11 +17,22 @@ class SensorUpdate():
         self.sensor_id = sensor_id
         self.new_value = new_value
 
+    def set_timestamp(self, timestamp):
+        self.timestamp = timestamp
+
+def post_message(message, topic):
+    try:
+        producer.send(topic, message)
+    except:
+        print("No broker for " + topic + " found")
+
 def run_cycle(facility, cycle):
     for command in cycle: 
         update = SensorUpdate(facility.id, command.node_id, command.new_value)
+        ts = datetime.datetime.now().timestamp()
+        update.set_timestamp(ts)
         update = json.dumps(update, default=lambda o: o.__dict__)
-        producer.send('test', update)
+        post_message(update, 'test')
 
 def get_cycle(simulation, start_point):
     cycle = []
