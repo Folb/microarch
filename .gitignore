@@ -14,7 +14,7 @@
 .idea/**/shelf
 facility/facilities/*.json
 requirements
-
+*.db
 # Generated files
 .idea/**/contentModel.xml
 
