@@ -120,4 +120,6 @@ for i in range(0, gen_size):
     with open('facilities/' + name + '.json', 'w') as outfile:
         json.dump(fac, outfile, default=lambda o: o.__dict__)
 
+
+
 print('Done')

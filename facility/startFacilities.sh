@@ -33,7 +33,8 @@ while true; do
         read CYCLE_NMB
         echo "How many messages do you want per cycle?"
         read UPDATE_NMB
-        python3 generateFacilities.py $FAC_NMB $CYCLE_NMB $UPDATE_NMB   
+        python3 generateFacilities.py $FAC_NMB $CYCLE_NMB $UPDATE_NMB
+        ./../stateServices/loadDatabases.sh
     fi
     if [ "$USER_INPUT" = "$LIST_FACILITIES" ]; then
         for filename in facilities/*.json; do

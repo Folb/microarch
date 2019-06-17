@@ -32,7 +32,7 @@ def run_cycle(facility, cycle):
         ts = datetime.datetime.now().timestamp()
         update.set_timestamp(ts)
         update = json.dumps(update, default=lambda o: o.__dict__)
-        post_message(update, 'test')
+        post_message(update, 'sensor_data')
 
 def get_cycle(simulation, start_point):
     cycle = []

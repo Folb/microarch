@@ -5,7 +5,7 @@ from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
-class Facility(Base):
+class FacilityState(Base):
     __tablename__ = "facility"
     id = Column(Integer, primary_key=True)
     name = Column(String(256), nullable=False)
@@ -14,7 +14,6 @@ class Facility(Base):
     location_y = Column(Float, nullable=False)
     status = Column(String(256), nullable=False)
     open = Column(Boolean, nullable=False)
-     
 
 engine = create_engine("sqlite:///./dbs/facilities.db")
 Base.metadata.create_all(engine)
