@@ -25,12 +25,12 @@ def parse_message_to_dict(msg):
     
 class SensorUpdate(object):
     def update(self, session, msg):
-        print(msg['sensor_id'])
         state = session.query(SensorState).filter_by(id = msg['sensor_id']).update({SensorState.value: msg['new_value']})
 
 while True:
     session = DBSession()
     msg = parse_message_to_dict(next(consumer))
+    print(msg)
     sh = SensorHistoric(msg['sensor_id'], msg['new_value'], msg['timestamp'])
     try:
         SensorUpdate().update(session, msg)

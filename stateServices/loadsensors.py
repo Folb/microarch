@@ -31,7 +31,6 @@ sensors = []
 for facility in facilities:
     for sensor in facility.sensors:
         ss = SensorState(sensor.id, facility.id, sensor.type, sensor.value, sensor.network_status)
-        session.add(ss)
         sensors.append(ss)
 
 session.add_all(sensors)
