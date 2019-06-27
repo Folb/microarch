@@ -15,6 +15,7 @@
 facility/facilities/*.json
 requirements
 *.db
+bootstrapservers
 # Generated files
 .idea/**/contentModel.xml
 

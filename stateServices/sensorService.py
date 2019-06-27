@@ -5,10 +5,11 @@ from kafka import KafkaConsumer, TopicPartition
 import json
 from sensorDAO import SensorState, SensorHistoric 
 
-bootstrap_servers = '35.233.35.208:9092'
+bootstrap_servers = open('../bootstrapservers')
+bootstrap_servers = bootstrap_servers.read().rstrip()
 
-consumer = KafkaConsumer(bootstrap_servers=bootstrap_servers)
-consumer.assign([TopicPartition('sensor_data', 0)])
+consumer = KafkaConsumer('sensor_data', group_id='sensor_service', bootstrap_servers=bootstrap_servers)
+#consumer.assign([TopicPartition('sensor_data', 0)])
 
 Base = declarative_base()
 engine = create_engine('sqlite:///./dbs/sensors.db')
@@ -29,9 +30,12 @@ class SensorUpdate(object):
 
 while True:
     session = DBSession()
-    msg = parse_message_to_dict(next(consumer))
-    print(msg)
-    sh = SensorHistoric(msg['sensor_id'], msg['new_value'], msg['timestamp'])
+    try:
+        msg = parse_message_to_dict(next(consumer))
+        print(msg)
+        sh = SensorHistoric(msg['sensor_id'], msg['new_value'], msg['timestamp'])
+    except:
+        print("simons wrong doing")
     try:
         SensorUpdate().update(session, msg)
         session.add(sh)

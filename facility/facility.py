@@ -6,10 +6,13 @@ from objects import Facility, Actuator, Sensor
 from parser import Parser
 import time
 import datetime
-from kafka import KafkaProducer
+from kafka import KafkaProducer, KafkaConsumer
 
 #Kafka stuff
-producer = KafkaProducer(bootstrap_servers='35.233.35.208:9092', value_serializer=lambda v: json.dumps(v).encode('utf-8'))
+bootstrap_servers = open('../bootstrapservers', 'r')
+bootstrap_servers = bootstrap_servers.read().rstrip()
+
+producer = KafkaProducer(bootstrap_servers=bootstrap_servers, value_serializer=lambda v: json.dumps(v).encode('utf-8'))
 
 class SensorUpdate():
     def __init__(self, facility_id, sensor_id, new_value):
@@ -46,9 +49,36 @@ def get_cycle(simulation, start_point):
 
     return cycle, start_point
 
+update_consumer = KafkaConsumer('actuator_command', bootstrap_servers=bootstrap_servers)
+
+def parse_message_to_dict(msg):
+    msg = msg.value.decode('utf-8').replace("\\", "")
+    msg = msg[1:-1]
+    return json.loads(msg)
+
+class ActuatorUpdate():
+    def __init__(self, facility_id):
+        self.facility_id = update['facility_id']
+        self.actuator_id = update['actuator_id']
+        self.new_status = update['new_status']
+
+def update_actuator(facility, update):
+    update = ActuatorUpdate(update)
+    if facility.id != update.facility_id:
+        return
+
+    for actuator in facility.actuators:
+        if actuator.id == update.actuator_id:
+            actuator.status = update.new_status
+            return True
+
 def run_simulation(facility):
     start_point = 0
     while True:
+        #update = parse_message_to_dict(next(update_consumer))
+        #complete = update_actuator(facility, update)
+        #if complete:
+            #post_message(update, 'actuator_change')
         cycle, start_point = get_cycle(facility.simulation, start_point)
         run_cycle(facility, cycle)
         time.sleep(2)
