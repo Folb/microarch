@@ -65,20 +65,26 @@ class ActuatorUpdate():
 def update_actuator(facility, update):
     update = ActuatorUpdate(update)
     if facility.id != update.facility_id:
-        return
+        return False
 
     for actuator in facility.actuators:
         if actuator.id == update.actuator_id:
             actuator.status = update.new_status
             return True
+    return False
+
+def poll_update_consumer(facility):
+    msgs = update_consumer.poll(timeout_ms=200)
+    for msg in msgs:
+        update = parse_message_to_dict(msg)
+        complete = update_actuator(facility, update)
+        if complete:
+            post_message(update, 'actuator_change')
 
 def run_simulation(facility):
     start_point = 0
     while True:
-        #update = parse_message_to_dict(next(update_consumer))
-        #complete = update_actuator(facility, update)
-        #if complete:
-            #post_message(update, 'actuator_change')
+        poll_update_consumer(facility)
         cycle, start_point = get_cycle(facility.simulation, start_point)
         run_cycle(facility, cycle)
         time.sleep(2)
